@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: django-chatops-config
+  namespace: chatops
+data:
+  DEBUG: "True"
+  ALLOWED_HOSTS: "*"

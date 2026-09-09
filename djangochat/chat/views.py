@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+
 from .models import Room, Message
 
 # Create your views here.
@@ -50,3 +51,8 @@ def send(request):
     new_message.save()
 
     return JsonResponse({"status": "Message sent successfully"})
+
+
+
+def health_check(request):
+    return JsonResponse({"status": "healthy"})

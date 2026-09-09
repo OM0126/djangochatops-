@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import health_check
 from . import views
 
 urlpatterns = [
@@ -6,6 +7,6 @@ urlpatterns = [
     path("checkview", views.checkview, name="checkview"),
     path("getMessages/<str:room>/", views.getMessages, name="getMessages"),
     path("send", views.send, name="send"),
-    path("<str:room>/", views.room, name="room")
+    path("health/", health_check, name="health"),   # moved above <str:room>/
+    path("<str:room>/", views.room, name="room"),
 ]
-
