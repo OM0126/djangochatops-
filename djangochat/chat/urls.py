@@ -7,6 +7,6 @@ urlpatterns = [
     path("checkview", views.checkview, name="checkview"),
     path("getMessages/<str:room>/", views.getMessages, name="getMessages"),
     path("send", views.send, name="send"),
-    path("health/", health_check, name="health"),   # moved above <str:room>/
+    path("health/", health_check, name="health"), 
     path("<str:room>/", views.room, name="room"),
 ]
