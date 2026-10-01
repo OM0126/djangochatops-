@@ -19,13 +19,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-SECRET_KEY = 'django-insecure-s6xz(&yf6pyzy125szzf#+d(7b^ewzf4mu9*z1s&s^+-%57&e+'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
+DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
 
-DEBUG = True
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
-
-
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -102,9 +103,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-
-STATIC_URL = 'static/'
-
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 

@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 from .models import Room, Message
 
-# Create your views here.
+
 def home(request):
     return render(request, "home.html")
 
+
 def room(request, room):
-    username = request.GET.get('username')
+    username = request.GET.get("username")
     room_details = Room.objects.get(name=room)
 
     return render(request, "room.html", {
@@ -17,16 +19,20 @@ def room(request, room):
         "room_details": room_details
     })
 
+
+@require_POST
 def checkview(request):
-    room = request.POST['room_name']
-    username = request.POST['username']
+    room = request.POST["room_name"]
+    username = request.POST["username"]
 
     if Room.objects.filter(name=room).exists():
-        return redirect('/'+room+'/?username='+username)
+        return redirect("/" + room + "/?username=" + username)
     else:
         new_room = Room.objects.create(name=room)
         new_room.save()
+
         return redirect("/" + room + "/?username=" + username)
+
 
 def getMessages(request, room):
     room_details = Room.objects.get(name=room)
@@ -37,10 +43,11 @@ def getMessages(request, room):
         "messages": list(messages.values())
     })
 
+
 def send(request):
-    username = request.POST['username']
-    room_id = request.POST['room_id']
-    message = request.POST['message']
+    username = request.POST["username"]
+    room_id = request.POST["room_id"]
+    message = request.POST["message"]
 
     new_message = Message.objects.create(
         value=message,
@@ -50,9 +57,12 @@ def send(request):
 
     new_message.save()
 
-    return JsonResponse({"status": "Message sent successfully"})
-
+    return JsonResponse({
+        "status": "Message sent successfully"
+    })
 
 
 def health_check(request):
-    return JsonResponse({"status": "healthy"})
+    return JsonResponse({
+        "status": "healthy"
+    })
