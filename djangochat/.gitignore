@@ -1,4 +1,14 @@
-db.sqlite3
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Django
 .env
+db.sqlite3
+staticfiles/
+media/
