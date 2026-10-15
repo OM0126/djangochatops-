@@ -4,7 +4,10 @@ from django.views.decorators.http import require_POST
 
 from .models import Room, Message
 
+from django.http import HttpResponse
 
+def favicon(request):
+    return HttpResponse(status=204)
 def home(request):
     return render(request, "home.html")
 
