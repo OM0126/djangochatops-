@@ -1,12 +1,19 @@
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 
 
-# Create your models here.
 class Room(models.Model):
     name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class Message(models.Model):
-    value =  models.CharField(max_length=100000000)
-    date = models.DateTimeField(default=datetime.now,blank=True)
-    user = models.CharField(max_length=100000000)
-    room = models.CharField(max_length=100000000)
+    value = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
+    user = models.CharField(max_length=100)
+    room = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.user}: {self.value[:50]}"

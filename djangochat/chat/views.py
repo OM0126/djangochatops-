@@ -1,19 +1,23 @@
+
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
+from django.urls import reverse
+from urllib.parse import quote
 
 from .models import Room, Message
 
-from django.http import HttpResponse
 
 def favicon(request):
     return HttpResponse(status=204)
+
+
 def home(request):
     return render(request, "home.html")
 
 
 def room(request, room):
-    username = request.GET.get("username")
+    username = request.GET.get("username", "")
     room_details = Room.objects.get(name=room)
 
     return render(request, "room.html", {
@@ -25,43 +29,60 @@ def room(request, room):
 
 @require_POST
 def checkview(request):
-    room = request.POST["room_name"]
-    username = request.POST["username"]
+    room_name = request.POST.get("room_name", "").strip()
+    username = request.POST.get("username", "").strip()
 
-    if Room.objects.filter(name=room).exists():
-        return redirect("/" + room + "/?username=" + username)
-    else:
-        new_room = Room.objects.create(name=room)
-        new_room.save()
+    if not room_name or not username:
+        return JsonResponse({
+            "error": "Room name and username are required"
+        }, status=400)
 
-        return redirect("/" + room + "/?username=" + username)
+    Room.objects.get_or_create(name=room_name)
+
+    return redirect(
+        f"/{quote(room_name, safe='')}/?username={quote(username, safe='')}"
+    )
 
 
 def getMessages(request, room):
-    room_details = Room.objects.get(name=room)
-
-    messages = Message.objects.filter(room=room_details)
+    messages = Message.objects.filter(
+        room=room
+    ).order_by("date")
 
     return JsonResponse({
-        "messages": list(messages.values())
+        "messages": list(messages.values(
+            "id", "value", "date", "user", "room"
+        ))
     })
 
 
+@require_POST
 def send(request):
-    username = request.POST["username"]
-    room_id = request.POST["room_id"]
-    message = request.POST["message"]
+    username = request.POST.get("username", "").strip()
+    room_id = request.POST.get("room_id", "").strip()
+    message = request.POST.get("message", "").strip()
+
+    if not username or not room_id or not message:
+        return JsonResponse({
+            "error": "Username, room ID and message are required"
+        }, status=400)
+
+    try:
+        room_obj = Room.objects.get(id=room_id)
+    except (Room.DoesNotExist, ValueError):
+        return JsonResponse({
+            "error": "Room not found"
+        }, status=404)
 
     new_message = Message.objects.create(
         value=message,
         user=username,
-        room=Room.objects.get(id=room_id)
+        room=room_obj.name
     )
 
-    new_message.save()
-
     return JsonResponse({
-        "status": "Message sent successfully"
+        "status": "Message sent successfully",
+        "message_id": new_message.id
     })
 
 
