@@ -1,3 +1,4 @@
+
 name: Django ChatOps CI/CD
 
 on:
@@ -62,9 +63,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Image
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
           context: ./djangochat
           push: true
-          tags: om0126/chatops:latest
+          tags: |
+            om0126/chatops:latest
+            om0126/chatops:${{ github.sha }}
