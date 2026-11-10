@@ -331,7 +331,85 @@ kubectl delete service chatops-service
 kubectl delete hpa chatops-hpa
 ```
 
-## 5. Kubernetes Auto Scaling – HPA
+## 5. How to Access the Web Application
+
+After deploying the application in Kubernetes using Minikube, follow these steps to open it in your browser.
+
+### Step 1: Start Minikube
+
+```bash
+minikube start --driver=docker
+```
+
+Check Minikube status:
+
+```bash
+minikube status
+```
+
+### Step 2: Check Application Pods
+
+```bash
+kubectl get pods
+```
+
+Make sure the ChatOps application pods are running.
+
+### Step 3: Check Kubernetes Service
+
+```bash
+kubectl get services
+```
+
+Check for the service named:
+
+```text
+chatops-service
+```
+
+The service uses NodePort `30080` to provide access to the application.
+
+### Step 4: Get the Application URL
+
+Run:
+
+```bash
+minikube service chatops-service --url
+```
+
+Minikube will display the URL of your application.
+
+Example:
+
+```text
+http://192.168.49.2:30080
+```
+
+**Note:** The IP address may be different on your system.
+
+### Step 5: Open the Application
+
+Copy the URL displayed in your terminal and open it in your web browser.
+
+You can now access the Django ChatOps application.
+
+### Alternative: Port Forwarding
+
+You can also access the application using port forwarding:
+
+```bash
+kubectl port-forward svc/chatops-service 8000:8000
+```
+
+Open the following URL in your browser:
+
+```text
+http://localhost:8000
+```
+
+Keep the terminal running while using port forwarding.
+
+## 6. Kubernetes Auto Scaling – HPA
 
 I configured Horizontal Pod Autoscaling (HPA) to increase or decrease the number of application pods based on CPU usage.
 
@@ -386,7 +464,7 @@ kubectl delete pod load-generator
 
 I used this test to observe how Kubernetes HPA increases the number of application pods when CPU usage increases.
 
-## 6. Monitoring with Prometheus and Grafana
+## 7. Monitoring with Prometheus and Grafana
 
 I installed Prometheus and Grafana using Helm.
 
@@ -503,7 +581,7 @@ I also created alerts in Grafana for:
 
 These alerts help identify problems in the application.
 
-## 7. Useful Kubernetes Troubleshooting Commands
+## 8. Useful Kubernetes Troubleshooting Commands
 
 These commands are useful when something does not work properly.
 
@@ -555,7 +633,7 @@ kubectl rollout status deployment/chatops-deployment
 kubectl rollout history deployment/chatops-deployment
 ```
 
-## 8. Project Folder Structure
+## 9. Project Folder Structure
 
 ```text
 djangochatops-/
@@ -583,7 +661,7 @@ djangochatops-/
 └── README.md
 ```
 
-## 9. What I Learned
+## 10. What I Learned
 
 While working on this project, I learned:
 
@@ -598,6 +676,9 @@ While working on this project, I learned:
 - How to monitor Kubernetes using Prometheus and Grafana.
 - How to create alerts and check application performance.
 
+## Author
+
+**OM0126**
 
 GitHub: [https://github.com/OM0126](https://github.com/OM0126)
 
