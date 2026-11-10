@@ -598,20 +598,6 @@ While working on this project, I learned:
 - How to monitor Kubernetes using Prometheus and Grafana.
 - How to create alerts and check application performance.
 
-## 10. Future Improvements
-
-I plan to improve this project by:
-
-- Connecting PostgreSQL to the application.
-- Improving the CI/CD pipeline.
-- Adding better application monitoring.
-- Improving logging and alerting.
-- Performing more load and performance tests.
-- Exploring cloud deployment after completing the local setup.
-
-## Author
-
-**OM0126**
 
 GitHub: [https://github.com/OM0126](https://github.com/OM0126)
 
